@@ -89,14 +89,28 @@ app.use((req, res, next) => {
   // Other ports are firewalled. Default to 5000 if not specified.
   // this serves both the API and the client.
   // It is the only port that is not firewalled.
-  const port = parseInt(process.env.PORT || "5000", 10);
-  httpServer.listen(
-    {
-      port,
-      host: "0.0.0.0",
-    },
-    () => {
-      log(`serving on port ${port}`);
-    },
-  );
+  const PORT = parseInt(process.env.PORT || "5000", 10);
+
+  async function startServer() {
+    try {
+      // Initialize database
+      const { initDb } = await import("./db");
+      await initDb();
+
+      httpServer.listen(
+        {
+          port: PORT,
+          host: "0.0.0.0",
+        },
+        () => {
+          log(`serving on port ${PORT}`);
+        },
+      );
+    } catch (error) {
+      console.error("Failed to start server:", error);
+      process.exit(1);
+    }
+  }
+
+  startServer();
 })();
