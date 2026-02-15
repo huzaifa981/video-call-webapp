@@ -11,8 +11,7 @@
   <body>
     <div id="root"></div>
     <script>
-      window.global = window;
-      window.process = { env: { DEBUG: undefined }, nextTick: function(cb) { setTimeout(cb, 0) } };
+      // Global and process shims are handled by vite-plugin-node-polyfills
     </script>
     <script type="module" src="/src/main.tsx"></script>
   </body>

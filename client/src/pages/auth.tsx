@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLogin, useRegister, useUser } from "@/hooks/use-auth";
 import { useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
@@ -16,11 +16,14 @@ export default function AuthPage() {
   const { data: user, isLoading } = useUser();
   const [, setLocation] = useLocation();
 
+  useEffect(() => {
+    if (user) {
+      setLocation("/");
+    }
+  }, [user, setLocation]);
+
   if (isLoading) return null;
-  if (user) {
-    setLocation("/");
-    return null;
-  }
+  if (user) return null;
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,7 +40,7 @@ export default function AuthPage() {
       <div className="hidden lg:flex flex-col justify-center items-center relative overflow-hidden bg-primary/5 p-12">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-background to-background z-0" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[120px] opacity-50" />
-        
+
         <div className="relative z-10 text-center space-y-6 max-w-lg">
           <div className="w-20 h-20 bg-gradient-to-br from-primary to-purple-600 rounded-3xl mx-auto flex items-center justify-center shadow-2xl shadow-primary/30 rotate-3">
             <Video className="w-10 h-10 text-white" />
@@ -65,17 +68,17 @@ export default function AuthPage() {
             </TabsList>
 
             <TabsContent value="login">
-              <motion.form 
+              <motion.form
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                onSubmit={handleLogin} 
+                onSubmit={handleLogin}
                 className="space-y-6"
               >
                 <div className="space-y-2">
                   <Label htmlFor="login-username">Username</Label>
-                  <Input 
-                    id="login-username" 
-                    placeholder="Enter username" 
+                  <Input
+                    id="login-username"
+                    placeholder="Enter username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
@@ -84,10 +87,10 @@ export default function AuthPage() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="login-password">Password</Label>
-                  <Input 
-                    id="login-password" 
-                    type="password" 
-                    placeholder="Enter password" 
+                  <Input
+                    id="login-password"
+                    type="password"
+                    placeholder="Enter password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
@@ -101,17 +104,17 @@ export default function AuthPage() {
             </TabsContent>
 
             <TabsContent value="register">
-              <motion.form 
+              <motion.form
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                onSubmit={handleRegister} 
+                onSubmit={handleRegister}
                 className="space-y-6"
               >
                 <div className="space-y-2">
                   <Label htmlFor="reg-username">Choose Username</Label>
-                  <Input 
-                    id="reg-username" 
-                    placeholder="johndoe" 
+                  <Input
+                    id="reg-username"
+                    placeholder="johndoe"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
@@ -120,10 +123,10 @@ export default function AuthPage() {
                 </div>
                 <div className="space-y-2">
                   <Label htmlFor="reg-password">Choose Password</Label>
-                  <Input 
-                    id="reg-password" 
-                    type="password" 
-                    placeholder="••••••••" 
+                  <Input
+                    id="reg-password"
+                    type="password"
+                    placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
