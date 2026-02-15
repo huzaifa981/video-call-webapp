@@ -1,13 +1,13 @@
 import { useUser, useLogout } from "@/hooks/use-auth";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
-import { 
-  LogOut, 
-  Video, 
-  Users, 
-  Settings, 
+import {
+  LogOut,
+  Video,
+  Users,
+  Settings,
   Menu,
-  X 
+  X
 } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -31,8 +31,8 @@ export function LayoutShell({ children }: LayoutShellProps) {
       <Link href={href}>
         <div className={`
           flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-all duration-200 group
-          ${isActive 
-            ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25' 
+          ${isActive
+            ? 'bg-primary text-primary-foreground shadow-lg shadow-primary/25'
             : 'text-muted-foreground hover:bg-white/5 hover:text-foreground'}
         `}>
           <Icon className={`w-5 h-5 ${isActive ? 'text-white' : 'group-hover:text-primary transition-colors'}`} />
@@ -61,19 +61,19 @@ export function LayoutShell({ children }: LayoutShellProps) {
 
         <div className="mt-auto pt-6 border-t border-border/50">
           <div className="flex items-center gap-3 mb-4 px-2">
-            <div 
+            <div
               className="w-10 h-10 rounded-full flex items-center justify-center text-sm font-bold border-2 border-border"
               style={{ backgroundColor: user.avatarColor, color: '#fff' }}
             >
-              {user.username.slice(0, 2).toUpperCase()}
+              {user.email?.slice(0, 2).toUpperCase() || 'NA'}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-medium truncate">{user.username}</p>
+              <p className="font-medium truncate">{user.email || 'No email'}</p>
               <p className="text-xs text-muted-foreground">Online</p>
             </div>
           </div>
-          <Button 
-            variant="ghost" 
+          <Button
+            variant="ghost"
             className="w-full justify-start text-muted-foreground hover:text-destructive hover:bg-destructive/10"
             onClick={() => logout()}
           >
@@ -99,7 +99,7 @@ export function LayoutShell({ children }: LayoutShellProps) {
       {/* Mobile Menu Overlay */}
       <AnimatePresence>
         {isMobileMenuOpen && (
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, x: '100%' }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
@@ -118,8 +118,8 @@ export function LayoutShell({ children }: LayoutShellProps) {
                 <NavItem href="/settings" icon={Settings} label="Settings" />
               </div>
             </nav>
-            <Button 
-              variant="outline" 
+            <Button
+              variant="outline"
               className="w-full justify-center"
               onClick={() => logout()}
             >

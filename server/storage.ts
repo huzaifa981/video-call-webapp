@@ -4,12 +4,12 @@ import { eq, or } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: number): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
+  getUserByEmail(email: string): Promise<User | undefined>;
   createUser(user: InsertUser): Promise<User>;
   updateUserStatus(userId: number, isOnline: boolean, socketId?: string): Promise<void>;
   getOnlineUsers(): Promise<User[]>;
   getAllUsers(): Promise<User[]>;
-  
+
   createCall(call: InsertCall): Promise<Call>;
   endCall(id: number, duration: number, recordingPath?: string): Promise<void>;
   getUserCalls(userId: number): Promise<Call[]>;
@@ -25,19 +25,19 @@ class MemoryStorage implements IStorage {
     return this.users.find(u => u.id === id);
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    return this.users.find(u => u.username === username);
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    return this.users.find(u => u.email === email);
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const user: User = {
+    const user = {
       ...insertUser,
       id: this.nextUserId++,
       isOnline: false,
       socketId: null,
       lastSeen: new Date(),
       createdAt: new Date()
-    };
+    } as User;
     this.users.push(user);
     return user;
   }
@@ -92,22 +92,22 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    const [user] = await db!.select().from(users).where(eq(users.username, username));
+  async getUserByEmail(email: string): Promise<User | undefined> {
+    const [user] = await db!.select().from(users).where(eq(users.email, email));
     return user;
   }
 
   async createUser(insertUser: InsertUser): Promise<User> {
-    const [user] = await db!.insert(users).values(insertUser).returning();
+    const [user] = await db!.insert(users).values(insertUser).returning() as User[];
     return user;
   }
 
   async updateUserStatus(userId: number, isOnline: boolean, socketId?: string): Promise<void> {
     await db!.update(users)
-      .set({ 
-        isOnline, 
+      .set({
+        isOnline,
         socketId: isOnline ? socketId : null,
-        lastSeen: new Date() 
+        lastSeen: new Date()
       })
       .where(eq(users.id, userId));
   }
@@ -121,16 +121,16 @@ export class DatabaseStorage implements IStorage {
   }
 
   async createCall(call: InsertCall): Promise<Call> {
-    const [newCall] = await db!.insert(calls).values(call).returning();
+    const [newCall] = await db!.insert(calls).values(call).returning() as Call[];
     return newCall;
   }
 
   async endCall(id: number, duration: number, recordingPath?: string): Promise<void> {
     await db!.update(calls)
-      .set({ 
+      .set({
         endedAt: new Date(),
         durationSeconds: duration,
-        recordingPath 
+        recordingPath
       })
       .where(eq(calls.id, id));
   }

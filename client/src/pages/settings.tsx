@@ -21,14 +21,14 @@ export default function Settings() {
           </CardHeader>
           <CardContent className="space-y-4">
             <div className="flex items-center gap-4">
-              <div 
+              <div
                 className="w-16 h-16 rounded-full flex items-center justify-center text-xl font-bold text-white shadow-lg"
                 style={{ backgroundColor: user?.avatarColor }}
               >
-                {user?.username.slice(0, 2).toUpperCase()}
+                {user?.email?.slice(0, 2).toUpperCase() || 'NA'}
               </div>
               <div>
-                <h3 className="font-semibold text-lg">{user?.username}</h3>
+                <h3 className="font-semibold text-lg">{user?.email || 'No email'}</h3>
                 <p className="text-sm text-muted-foreground">ID: {user?.id}</p>
               </div>
             </div>

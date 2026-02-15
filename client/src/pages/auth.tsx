@@ -9,7 +9,7 @@ import { Loader2, Video } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function AuthPage() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { mutate: login, isPending: isLoginPending } = useLogin();
   const { mutate: register, isPending: isRegisterPending } = useRegister();
@@ -27,12 +27,12 @@ export default function AuthPage() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    login({ username, password });
+    login({ email, password });
   };
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
-    register({ username, password });
+    register({ email, password });
   };
 
   return (
@@ -75,12 +75,13 @@ export default function AuthPage() {
                 className="space-y-6"
               >
                 <div className="space-y-2">
-                  <Label htmlFor="login-username">Username</Label>
+                  <Label htmlFor="login-email">Email</Label>
                   <Input
-                    id="login-username"
-                    placeholder="Enter username"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    id="login-email"
+                    type="email"
+                    placeholder="Enter email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     required
                     className="h-12"
                   />
@@ -111,12 +112,13 @@ export default function AuthPage() {
                 className="space-y-6"
               >
                 <div className="space-y-2">
-                  <Label htmlFor="reg-username">Choose Username</Label>
+                  <Label htmlFor="reg-email">Email</Label>
                   <Input
-                    id="reg-username"
-                    placeholder="johndoe"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
+                    id="reg-email"
+                    type="email"
+                    placeholder="Enter email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
                     required
                     className="h-12"
                   />

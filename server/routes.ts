@@ -47,9 +47,9 @@ export async function registerRoutes(
   app.use(passport.session());
 
   passport.use(
-    new LocalStrategy(async (username, password, done) => {
+    new LocalStrategy({ usernameField: 'email' }, async (email, password, done) => {
       try {
-        const user = await storage.getUserByUsername(username);
+        const user = await storage.getUserByEmail(email);
         if (!user || !(await comparePassword(password, user.password))) {
           return done(null, false);
         }
@@ -73,9 +73,9 @@ export async function registerRoutes(
   // Auth Routes
   app.post(api.auth.register.path, async (req, res) => {
     try {
-      const existingUser = await storage.getUserByUsername(req.body.username);
+      const existingUser = await storage.getUserByEmail(req.body.email);
       if (existingUser) {
-        return res.status(400).json({ message: "Username already exists" });
+        return res.status(400).json({ message: "Email already exists" });
       }
 
       const hashedPassword = await hashPassword(req.body.password);
@@ -173,7 +173,7 @@ export async function registerRoutes(
     socket.on("answer-call", ({ to, signal }) => {
       io.to(to).emit("call-answered", { signal, to });
     });
-    
+
     socket.on("ice-candidate", ({ to, candidate }) => {
       io.to(to).emit("ice-candidate", { candidate, from: socket.id });
     });

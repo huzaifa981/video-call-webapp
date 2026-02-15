@@ -12,9 +12,9 @@ export default function Dashboard() {
   const { data: currentUser } = useUser();
   const [search, setSearch] = useState("");
 
-  const filteredUsers = users?.filter(u => 
-    u.id !== currentUser?.id && 
-    u.username.toLowerCase().includes(search.toLowerCase())
+  const filteredUsers = users?.filter(u =>
+    u.id !== currentUser?.id &&
+    u.email?.toLowerCase().includes(search.toLowerCase())
   ) || [];
 
   return (
@@ -26,11 +26,11 @@ export default function Dashboard() {
             Select a colleague to start a secure video call.
           </p>
         </div>
-        
+
         <div className="relative w-full md:w-96">
           <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-          <Input 
-            placeholder="Search by name..." 
+          <Input
+            placeholder="Search by name..."
             className="pl-10 h-12 bg-card border-border/50 focus:border-primary/50"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
