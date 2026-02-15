@@ -1,0 +1,244 @@
+You are a senior enterprise software architect and full-stack engineer.
+
+Build a COMPLEX, enterprise-level real-time video calling web application.
+
+Tech Stack:
+
+FRONTEND:
+- React + Vite
+- Tailwind CSS
+- React Router DOM
+- Context API
+- Zustand (optional for scalable state)
+- Axios
+- Socket.io-client
+- WebRTC APIs
+
+BACKEND:
+- Node.js + Express
+- MS SQL Server (mssql package with connection pooling)
+- Socket.io
+- JWT authentication
+- bcrypt
+- Redis (for scaling socket presence)
+- Winston (logging)
+
+REAL-TIME:
+- WebRTC (RTCPeerConnection)
+- STUN + TURN servers (production-ready)
+- Socket.io for signaling
+- ICE candidate handling
+
+========================================
+ENTERPRISE ARCHITECTURE REQUIREMENTS
+========================================
+
+Use layered architecture:
+
+backend/
+  src/
+    config/
+    controllers/
+    services/
+    repositories/
+    middleware/
+    sockets/
+    utils/
+    logs/
+    server.js
+
+Use:
+- Repository pattern for DB access
+- Service layer for business logic
+- Controller layer for routes
+- Socket handler layer
+- Centralized error handling
+- Structured logging
+- Environment-based configs
+
+========================================
+DATABASE (MS SQL SERVER)
+========================================
+
+Tables:
+
+Users:
+- id (INT, PK, Identity)
+- name (NVARCHAR(100))
+- email (NVARCHAR(150), Unique)
+- passwordHash (NVARCHAR(MAX))
+- avatarColor (NVARCHAR(20))
+- createdAt (DATETIME2)
+- lastSeen (DATETIME2)
+
+UserStatus:
+- userId (INT, FK -> Users.id)
+- isOnline (BIT)
+- socketId (NVARCHAR(200))
+- updatedAt (DATETIME2)
+
+Calls:
+- id (INT, PK)
+- callerId (INT)
+- receiverId (INT)
+- startedAt (DATETIME2)
+- endedAt (DATETIME2)
+- durationSeconds (INT)
+- recordingPath (NVARCHAR(MAX))
+
+Indexes on:
+- email
+- userId
+- isOnline
+
+Use parameterized queries everywhere.
+
+========================================
+AUTHENTICATION
+========================================
+
+- Signup
+- Login
+- JWT access + refresh token
+- Password hashing (bcrypt)
+- Secure httpOnly cookies
+- Protected routes
+- Role-ready architecture (future proof)
+
+========================================
+ONLINE STATUS (GREEN DOT FEATURE)
+========================================
+
+- When user connects via Socket.io → mark isOnline = 1
+- When disconnects → mark isOnline = 0 and update lastSeen
+- Emit real-time presence updates
+
+Frontend:
+- User avatar circle
+- If online → show small green dot (bottom-right)
+- If offline → grey
+- Must update instantly
+
+IMPORTANT:
+This is NOT an Instagram clone.
+This is a professional enterprise video communication platform.
+
+========================================
+REAL-TIME VIDEO CALLING
+========================================
+
+Implement:
+
+- One-to-one video calling
+- ICE candidate exchange
+- Offer/Answer signaling
+- STUN servers (Google public STUN)
+- TURN server configuration placeholder
+
+Call Flow:
+1. Caller sends call request
+2. Receiver gets modal popup
+3. Accept → establish RTCPeerConnection
+4. Reject → notify caller
+5. Disconnect handling
+
+========================================
+SCREEN SHARING
+========================================
+
+Add:
+- “Share Screen” button
+- Use navigator.mediaDevices.getDisplayMedia()
+- Replace video track dynamically
+- Allow switching back to camera
+- Notify other user when screen sharing starts
+
+========================================
+CALL RECORDING
+========================================
+
+Implement browser-based recording using:
+
+- MediaRecorder API
+- Record combined stream
+- Allow:
+   - Start Recording
+   - Stop Recording
+- Save recording locally (download)
+- Send metadata to backend
+- Store recording path in Calls table
+
+========================================
+UI / UX REQUIREMENTS
+========================================
+
+- Modern enterprise UI
+- Fully responsive
+- Clean dashboard layout
+- Sidebar navigation
+- Smooth animations
+- Toast notifications
+- Dark / Light mode
+- Proper loading states
+
+Call Interface Must Include:
+- Local video
+- Remote video
+- Mute / Unmute
+- Camera toggle
+- Screen share
+- Record button
+- Call timer
+- End call button
+
+========================================
+SCALABILITY
+========================================
+
+- Use Redis adapter for Socket.io
+- Ready for horizontal scaling
+- Connection pooling for MSSQL
+- Logging with Winston
+- Error monitoring ready structure
+
+========================================
+SECURITY
+========================================
+
+- Helmet
+- CORS strict config
+- Rate limiting
+- SQL injection prevention
+- Environment variables
+- Secure JWT secrets
+
+========================================
+DELIVERABLES
+========================================
+
+Provide:
+
+- Full backend code
+- Full frontend code
+- SQL scripts
+- .env example
+- README with setup steps
+- Proper comments
+- Production-ready configuration
+- Local development instructions
+
+Commands:
+- npm install
+- npm run dev (frontend)
+- npm run server (backend)
+
+The final system must:
+
+- Connect two users anywhere in the world
+- Work in real-time
+- Show green online indicator
+- Support screen sharing
+- Support recording
+- Be enterprise-grade
+- Be cleanly structured
+- Be production-ready
